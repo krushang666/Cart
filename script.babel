@@ -1,0 +1,77 @@
+var Cart = () => {
+  var productNames = ["Laptop", "Mouse", "Keyboard", "SSD", "RAM"];
+  var productPrices = [75000, 850, 1500, 3500, 2700];
+  var productQty = [0, 0, 0, 0, 0];
+  var [qty, setQty] = React.useState(productQty);
+  var [totalQty, setTotalQty] = React.useState(0);
+
+  var calcluateQty = () => {
+    var total = 0;
+    qty.forEach((q) => {
+      total += q;
+    });
+
+    return total;
+  };
+
+  var calcluateAmount = () => {
+    var total = 0;
+    qty.forEach((q, index) => {
+      total += q * productPrices[index];
+    });
+
+    return total;
+  };
+
+  var addToCart = (index) => {
+    setQty(qty.map((q, i) => (i == index ? q + 1 : q)));
+  };
+
+  function removeCart(index) {
+    setQty(qty.map((q, i) => (i == index && q > 0 ? q - 1 : q)));
+  }
+
+  return (
+    <div className="container">
+      <div className="card m-5">
+        <div className="card-body">
+          <table className="table table-bordered">
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Action</th>
+            </tr>
+
+            {productNames.map((nm, index) => (
+              <tr key={index}>
+                <td>{nm}</td>
+                <td>{productPrices[index]}</td>
+                <td>{qty[index]}</td>
+                <td>
+                  <button
+                    className="btn btn-success"
+                    onClick={() => addToCart(index)}
+                  >
+                    Add
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => removeCart(index)}
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+            <br />
+            <h4>Total qty: {calcluateQty()}</h4>
+            <h4>Total amount: {calcluateAmount()}</h4>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.render(<Cart />, document.getElementById("root"));
